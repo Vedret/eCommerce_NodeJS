@@ -2,7 +2,7 @@ const express=require('express');
 let morgan=require('morgan');
 
 let app = express();
-//Midleware
+//Middleware
 app.use(morgan('dev'));
 
 app.get('/name' , function(req,res){
