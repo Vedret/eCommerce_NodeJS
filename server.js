@@ -18,6 +18,7 @@ mongoose.connect(config.database , (err)=>{
 });
 
 //Middleware
+app.use(express.static(__dirname +'/public'))
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extend:true}));
@@ -43,7 +44,12 @@ app.post('/create-user',(req,res)=>{
 
 app.get('/' , function(req,res){
     
-    res.render('home');
+    res.render('main/home');
+})
+
+app.get('/about' , function(req,res){
+    
+    res.render('main/about');
 })
 
 app.listen(3000 , (err)=>{
