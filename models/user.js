@@ -1,13 +1,31 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 const bcrypt=require('bcrypt-nodejs');
 const Schema=mongoose.Schema;
 
 const UserSchema=new Schema({
-    email: { type: String, unique: true, lowercase: true},
-    password: String,
+
     profile:{
-        name: {type:String,default:''},
+        email:{
+            type:String,
+            lowercase: true,
+            required:true,
+            trim:true,
+            minlength:1,
+            unique :true,
+            validate: {
+                validator: validator.isEmail,
+                // short from
+                //  validator: (value)=>{
+                //     return validator.isEmail(value);
+                // }
+                message : `{Value}is not valid eMail address`
+            }
+            },
+        password: String,
+        name: {type:String,unique :true,default:''},
         picture: {type:String,default:''},
+      
     },
     address: String,
     history:[{
@@ -18,10 +36,10 @@ const UserSchema=new Schema({
 });
 
 // Hash the password before save it to the database
-UserSchema.pre('save',(next)=>{
+UserSchema.pre('save',function(next){
 
     let user = this; //>>>>> let user= new User ();
-    if(!user.isModified('password'))return next;
+    if(!user.isModified('password')) return next();
     if(user.password){
         bcrypt.genSalt(10,(err,salt)=>{            
             if(err) return next(err);
