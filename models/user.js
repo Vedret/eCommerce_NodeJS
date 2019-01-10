@@ -5,7 +5,8 @@ const Schema=mongoose.Schema;
 
 const UserSchema=new Schema({
 
-    profile:{
+    
+        password: String,
         email:{
             type:String,
             lowercase: true,
@@ -20,9 +21,9 @@ const UserSchema=new Schema({
                 //     return validator.isEmail(value);
                 // }
                 message : `{Value}is not valid eMail address`
-            }
+                        }
             },
-        password: String,
+    profile:{
         name: {type:String,unique :true,default:''},
         picture: {type:String,default:''},
       
