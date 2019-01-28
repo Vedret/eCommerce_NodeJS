@@ -11,7 +11,7 @@ const ejs=require('ejs');
 const ejsMate=require('ejs-mate');
 const MongoStore=require('connect-mongo')(session);
 
-
+let Category=require('./models/category.js');
 
 let app = express();
 
@@ -40,6 +40,13 @@ app.use(function(req, res, next) {
   res.locals.user = req.user;
   next();
 });
+app.use(function(req,res,next){
+    Category.find({},function(err,categories){
+        if(err) return next(err);
+        res.locals.categories=categories;
+        next();
+    });
+});
 
 
 app.engine('ejs',ejsMate);
@@ -48,9 +55,13 @@ app.set('view engine','ejs');
 
 let mainRoutes=require('./routes/main');
 let userRoutes=require('./routes/user');
+let adminRoutes=require('./routes/admin');
+let apiRoute=require('./api/api');
 
 app.use(mainRoutes);
 app.use(userRoutes);
+app.use(adminRoutes);
+app.use('/api',apiRoutes);
 
 app.listen(config.port , (err)=>{
 if(err) throw err;

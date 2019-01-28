@@ -16,3 +16,6 @@ router.route('/add-category')
             return res.redirect('/add-category');
         });
     })
+
+    
+module.exports=router
