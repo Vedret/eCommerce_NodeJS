@@ -61,7 +61,7 @@ let apiRoute=require('./api/api');
 app.use(mainRoutes);
 app.use(userRoutes);
 app.use(adminRoutes);
-app.use('/api',apiRoutes);
+app.use('/api',apiRoute);
 
 app.listen(config.port , (err)=>{
 if(err) throw err;

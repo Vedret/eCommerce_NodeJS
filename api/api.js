@@ -4,7 +4,7 @@ let faker=require('faker');
 let Category =require('../models/category');
 let Product=require('../models/product');
 
-router.route()
+router
     .get('/:name',function(req,res,next){
         async.waterfall([
             function(callback){
@@ -25,7 +25,7 @@ router.route()
                 }
             }
         ]);
-        res,json({message:'Success'});
+        res.json({message:'Success'});
     });
 
-    module.exports=router();
+    module.exports=router;
