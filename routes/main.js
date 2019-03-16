@@ -33,11 +33,7 @@ router.route('/search')
     .get((req,res,next)=>{
         if(req.query.q){
             index.search(req.query.q,function(err,data){
-                // let data1=data.hits.hits.map(function(hit){
-                //         return hit._source;
-                //         console.log("dataaa11"+hit);
-                //                     });
-                console.log(data.hits);
+                 console.log(data.hits);
                 res.render('main/search-result',{data:data.hits,query:req.query.q})
             })
         }
@@ -47,9 +43,30 @@ router.route('/search')
     })
 
 
-router.get('/' , function(req,res){
+router.get('/' , function(req,res,next){
     
+    if(req.user){
+     let perPage=9;
+     let page=req.params.page;
+
+     Product
+        .find()
+        .skip (perPage * page)
+        .limit(perPage)
+        .populate('category')
+        .exec(function(err,produts){
+            if (err) return next(err);
+            Product.count().exec(function (err,count){
+                if (err) return next(err);
+                res.render('main/product-main',{
+                    products:products,
+                    pages:count/perPage
+                });
+            });
+        });
+    }else{
     res.render('main/home');
+    }
 })
 
 router.get('/about' , function(req,res){
