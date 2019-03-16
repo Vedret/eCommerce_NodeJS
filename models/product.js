@@ -24,7 +24,7 @@ ProductSchema.plugin(mongooseAlgolia,{
     },
     mappings: {
       title: function(value) {
-        return `Book: ${value}`
+        return `Name: ${value}`
       }
     },
   
