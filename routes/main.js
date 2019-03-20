@@ -3,6 +3,28 @@ const Product = require('../models/product');
 const algoliasearch=require('algoliasearch');
 const config=require('../config/config');
 
+function paginate(req,res,next){
+    let perPage=9;
+     let page=req.params.page;
+
+     Product
+        .find()
+        .skip (perPage * page)
+        .limit(perPage)
+        .populate('category')
+        .exec(function(err,products){
+            if (err) return next(err);
+            Product.count().exec(function (err,count){
+                if (err) return next(err);
+                res.render('main/product-main',{
+                    products:products,
+                    pages:count/perPage
+                });
+            });
+        });
+    
+}
+
 let client = algoliasearch('EUXHYU6U4I', 'dc139b675f3962efc57140dc643e3475');
 let index = client.initIndex('ProductSchema');
 
@@ -46,27 +68,14 @@ router.route('/search')
 router.get('/' , function(req,res,next){
     
     if(req.user){
-     let perPage=9;
-     let page=req.params.page;
-
-     Product
-        .find()
-        .skip (perPage * page)
-        .limit(perPage)
-        .populate('category')
-        .exec(function(err,produts){
-            if (err) return next(err);
-            Product.count().exec(function (err,count){
-                if (err) return next(err);
-                res.render('main/product-main',{
-                    products:products,
-                    pages:count/perPage
-                });
-            });
-        });
+     paginate(req,res,next);
     }else{
     res.render('main/home');
     }
+});
+
+router.get('/page/:page',function(req,res,next){
+    paginate(req,res,next);
 })
 
 router.get('/about' , function(req,res){
