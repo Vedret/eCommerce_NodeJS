@@ -10,7 +10,7 @@ const bodyParser=require('body-parser');
 const ejs=require('ejs');
 const ejsMate=require('ejs-mate');
 const MongoStore=require('connect-mongo')(session);
-
+const cartLength=require('./middlewares/middleware');
 let Category=require('./models/category.js');
 
 let app = express();
@@ -40,6 +40,9 @@ app.use(function(req, res, next) {
   res.locals.user = req.user;
   next();
 });
+
+
+app.use(cartLength);
 app.use(function(req,res,next){
     Category.find({},function(err,categories){
         if(err) return next(err);

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Product = require('../models/product');
 const algoliasearch=require('algoliasearch');
 const config=require('../config/config');
+const Cart=require('../models/cart');
 
 function paginate(req,res,next){
     let perPage=9;
@@ -50,6 +51,24 @@ let index = client.initIndex('ProductSchema');
 //     .post((req,res,next)=>{
 //         res.redirect('/search?q='+req.body.q)
 // });
+
+router.post('/product/:product_id', function(req, res, next) {
+    Cart.findOne({ owner: req.user._id }, function(err, cart) {
+      cart.items.push({
+        item: req.body.product_id,
+        price: parseFloat(req.body.priceValue),
+        quantity: parseInt(req.body.quantity)
+      });
+
+      
+      cart.total = (cart.total + parseFloat(req.body.priceValue)).toFixed(2);
+  
+      cart.save(function(err) {
+        if (err) return next(err);
+        return res.redirect('/cart');
+      });
+    });
+  });
 
 router.route('/search')
     .get((req,res,next)=>{
@@ -100,6 +119,20 @@ router.get('/product/:id',function(req,res,next){
         if(err) return next(err);
         res.render('main/product',{
             product:product
+        });
+    });
+});
+
+router.get('/cart', function(req,res,next){
+    Cart
+    .findOne({owner:req.user._id})
+    .populate('items.item')
+    .exec(function(err,foundCart){
+        
+        if(err) return next(err);
+        res.render('main/cart',{
+            
+            foundCart:foundCart
         });
     });
 });

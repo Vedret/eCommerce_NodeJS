@@ -16,8 +16,9 @@ ProductSchema.plugin(mongooseAlgolia,{
     indexName: 'ProductSchema', //The name of the index in Algolia, you can also pass in a function
     selector: 'category name price image', //You can decide which field that are getting synced to Algolia (same as selector in mongoose)
     populate: {
-      path: 'owner',
-      select: 'name'
+      path: 'category',
+      select: 'name',
+      
     },
     defaults: {
       author: 'unknown'
@@ -42,5 +43,5 @@ ProductSchema.plugin(mongooseAlgolia,{
   });
   
   
-  
+
 module.exports=Model;

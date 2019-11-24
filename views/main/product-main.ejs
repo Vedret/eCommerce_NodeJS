@@ -3,14 +3,25 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron" id="navbar-gap">
     <div class="container">
-      <h1>Shop Smart , Save Big !</h1>
-      <p>Find your favourite products</p>
-      <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button">SignUp &raquo;</a></p> -->
+      <h1 class="text-center">Shop Smart , Save Big !</h1>
+      <p class="text-center">Find your favourite products</p>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="input-group col-md-12">
+                <span class="input-group-btn">
+                <input type="text" id="search1" class="form-control input-lg" name="search_term" placeholder="Search for a Product ...">
+                <button type="submit" class="btn btn-primary btn-lg"><i class="glyphicon glyphicon-search" ></i></button>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                </span>   
+            </div>
     </div>
   </div>
 
   <div class ="container">
-        <div class="row">
+        <div class="row" id="searchResults">
             <%for (var i =0;i <products.length; i++){ %>
                 <div class="col-md-4">
                 <a href ="/product/<%=products[i]._id %>">
